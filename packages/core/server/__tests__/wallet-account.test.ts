@@ -38,7 +38,7 @@ describe('wallet signup / login (mock crypto verifier: NOT cryptographic integra
     `)
     users = new UserStore(db, 'isolated-test-secret')
     verify = vi.fn(async ({ address, message }: { address: string; message: string }) =>
-      message.includes(address) && message.includes('URI: ' + ORIGIN))
+      message.toLowerCase().includes(address.toLowerCase()) && message.includes('URI: ' + ORIGIN))
     wallet = new WalletAuth(db, users, { verifyMessage: verify })
   })
   afterEach(() => { db.close(); vi.restoreAllMocks() })
