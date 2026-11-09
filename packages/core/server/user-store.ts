@@ -120,7 +120,9 @@ export class UserStore {
     const issuedAt = parseInt(issuedAtStr, 10)
     const expiresAt = parseInt(expiresAtStr, 10)
 
-    if (isNaN(issuedAt) || isNaN(expiresAt)) {
+    if (!Number.isSafeInteger(issuedAt) || !Number.isSafeInteger(expiresAt) ||
+      !/^\\d+$/.test(issuedAtStr) || !/^\\d+$/.test(expiresAtStr) ||
+      !/^[0-9a-f]{64}$/i.test(hmac)) {
       return { valid: false, error: AuthErrors.TOKEN_INVALID }
     }
 
