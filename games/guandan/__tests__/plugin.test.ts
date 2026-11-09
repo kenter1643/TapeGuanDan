@@ -49,11 +49,11 @@ describe('guandan Simple GameServerPlugin', () => {
   it('matches team win display to all four client viewpoints', () => {
     const state = simple()
     const deck = makeDeck()
-    state.players[0].hand = [deck[0]]
+    state.players[0].hand = [deck[1]]
     state.players[1].hand = [deck[1], deck[2]]
     state.players[2].hand = [deck[12]]
     state.players[3].hand = [deck[3], deck[4]]
-    let s = applyAction(state, ids[0], { type:'play', cardIds:[deck[0].id] }).state
+    let s = applyAction(state, ids[0], { type:'play', cardIds:[deck[1].id] }).state
     s = applyAction(s, ids[1], { type:'pass' }).state
     s = applyAction(s, ids[2], { type:'play', cardIds:[deck[12].id] }).state
     expect(guandanSimpleServerPlugin.checkGameEnd(s)).toBe('alice')

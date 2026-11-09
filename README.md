@@ -138,6 +138,18 @@ npm run server                   # 启动服务端
 - [掼蛋构建与联机验收清单](docs/guandan-validation.md)
 - [钱包与 TapeAPI 3.0 设计](docs/wallet-tapeapi-v3.md)
 
+## 单元测试
+
+项目通过 Vitest 覆盖游戏规则/状态机、四人单副牌模拟、钱包挑战与账号生命周期、用户资料和房间重连。执行：
+
+```bash
+npm ci
+npm run test
+npm -w client run build
+```
+
+详细用例与尚未覆盖的真实钱包/Socket.IO 端到端验收见 [单元测试覆盖矩阵](docs/unit-test-matrix.md)。新增测试是否通过须以实际执行和 GitHub CI 结果为准；**不能仅凭测试代码存在宣称已验证**。
+
 ## 开源说明
 
 本项目基于 [Tongzhuo](https://github.com/NFraw/Tongzhuo) 扩展，保留原始项目的 MIT 许可证及版权信息，详见 [LICENSE](LICENSE)。请确认自行添加的图片、音频、商标或其他素材具备相应许可；仓库不内置未经授权的第三方音频或美术资源。

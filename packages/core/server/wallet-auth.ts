@@ -35,7 +35,8 @@ export function walletVerifierAvailable(): boolean {
 }
 
 export class WalletAuth {
-  constructor(private db: Database.Database, private users: UserStore) {
+  // Tests can inject a verifier; the live server always uses the installed viem implementation.
+  constructor(private db: Database.Database, private users: UserStore, private verifySignature: Viem | null = null) {
     db.exec(`
       CREATE TABLE IF NOT EXISTS wallet_challenges (
         id TEXT PRIMARY KEY,
@@ -98,7 +99,7 @@ Expiration Time: ${expires.toISOString()}`
     const match = /^URI: (.+)$/m.exec(entry.message)
     if (typeof origin !== 'string' || match?.[1] !== origin) throw new Error('ORIGIN_MISMATCH')
 
-    const verifier = signatureVerifier()
+    const verifier = this.verifySignature ?? signatureVerifier()
     if (!verifier) throw new Error('WALLET_VERIFIER_UNAVAILABLE')
     const ok = await verifier.verifyMessage({
       address: entry.address as `0x${string}`,
