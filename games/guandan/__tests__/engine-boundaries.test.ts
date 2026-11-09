@@ -86,8 +86,8 @@ describe('Guandan reducer: rejects unsafe and invalid actions without mutation',
   })
 
   it('allows teammate finishing with first player to end immediately', () => {
-    const s = rig([[0], [1,2], [12], [3,4]])
-    const first = applyAction(s, ids[0], { type: 'play', cardIds: [deck[0].id] }).state
+    const s = rig([[1], [2,3], [12], [4,5]])
+    const first = applyAction(s, ids[0], { type: 'play', cardIds: [deck[1].id] }).state
     const passed = applyAction(first, ids[1], { type: 'pass' }).state
     const ended = applyAction(passed, ids[2], { type: 'play', cardIds: [deck[12].id] }).state
     expect(ended.phase).toBe('ended')
