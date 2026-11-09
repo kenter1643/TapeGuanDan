@@ -143,4 +143,33 @@ describe('RoomManager', () => {
     expect(detail!.playerList).toHaveLength(2)
     expect(detail!.playerList[0].ready).toBe(false)
   })
+  it('reconnects the same account with a new socket without duplicating seats', () => {
+    const manager = new RoomManager()
+    const room = manager.createRoom(createTestPlayer('a', 'old'), 'guandan-simple', 4)
+    manager.disconnectPlayer('a')
+    expect(room.players[0].connected).toBe(false)
+    manager.updateSocket('a', 'fresh')
+    expect(room.players).toHaveLength(1)
+    expect(room.players[0]).toMatchObject({ id: 'a', socketId: 'fresh', connected: true })
+    expect(manager.getPlayerId('old')).toBeNull()
+    expect(manager.getPlayerId('fresh')).toBe('a')
+  })
+
+  it('uses the latest player nickname in an existing room', () => {
+    const manager = new RoomManager()
+    const room = manager.createRoom(createTestPlayer('a'), 'guandan-simple', 4)
+    manager.setPlayerName('a', '新的游戏昵称')
+    expect(manager.getPlayerName('a')).toBe('新的游戏昵称')
+    expect(room.players[0].name).toBe('新的游戏昵称')
+    expect(manager.getRoomDetailForPlayer(room.id, 'a')?.playerList[0].name).toBe('新的游戏昵称')
+  })
+
+  it('updates lobby count when four players join and rejects fifth', () => {
+    const manager = new RoomManager()
+    const room = manager.createRoom(createTestPlayer('0'), 'guandan-simple', 4)
+    for (let i=1; i<4; i++) expect(manager.joinRoom(room.id, createTestPlayer(String(i))).success).toBe(true)
+    expect(manager.getRoomSummary(room.id)).toMatchObject({ players: 4, maxPlayers: 4, gameId: 'guandan-simple' })
+    expect(manager.joinRoom(room.id, createTestPlayer('extra'))).toMatchObject({ success: false, reason: 'full' })
+  })
+
 })
