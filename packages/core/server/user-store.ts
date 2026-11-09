@@ -121,7 +121,7 @@ export class UserStore {
     const expiresAt = parseInt(expiresAtStr, 10)
 
     if (!Number.isSafeInteger(issuedAt) || !Number.isSafeInteger(expiresAt) ||
-      !/^\\d+$/.test(issuedAtStr) || !/^\\d+$/.test(expiresAtStr) ||
+      !/^\d+$/.test(issuedAtStr) || !/^\d+$/.test(expiresAtStr) ||
       !/^[0-9a-f]{64}$/i.test(hmac)) {
       return { valid: false, error: AuthErrors.TOKEN_INVALID }
     }
